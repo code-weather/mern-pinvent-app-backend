@@ -5,7 +5,17 @@ require('dotenv').config();
 
 const app = express();
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`${PORT} is FIRED UP SON! 🔥🔥🔥`);
+app.get('/', (req, res) => {
+  console.log('Ayy this works BOIIIII!!!!');
+});
+
+const PORT = process.env.PORT || 8000;
+
+// Connect to mongoDB and start server
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => {
+  app.listen(PORT, () => {
+      console.log(`${PORT} is FIRED UP SON! 🔥🔥🔥`);
+    })
+  .catch((err) => console.log(err));
 });
