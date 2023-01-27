@@ -5,17 +5,24 @@ require('dotenv').config();
 
 const app = express();
 
-app.get('/', (req, res) => {
-  console.log('Ayy this works BOIIIII!!!!');
-});
+// Middlewares
+app.use(express.json()); // Help handle JSON data in our application
+app.use(express.urlencoded({extended: false})) // Help handle data that comes via the URL
 
-const PORT = process.env.PORT || 8000;
+// Routes
+app.get('/', (req, res) => {
+  res.send('Home page');
+});
 
 // Connect to mongoDB and start server
-mongoose.connect(process.env.MONGO_URI)
+mongoose.set('strictQuery', true); // When strict option is set to true, Mongoose will ensure that only the fields that are specified in your Schema will be saved in the database, and all other fields will not be saved (if some other fields are sent).
+
+const PORT = process.env.PORT || 8000;
+mongoose
+  .connect(process.env.MONGO_URI)
   .then(() => {
-  app.listen(PORT, () => {
+    app.listen(PORT, () => {
       console.log(`${PORT} is FIRED UP SON! 🔥🔥🔥`);
-    })
+    });
+  })
   .catch((err) => console.log(err));
-});
