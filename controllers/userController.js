@@ -33,7 +33,7 @@ const registerUser = asyncHandler(async (req, res) => {
   if (user) {
     const { _id, name, email, photo, phone, bio } = user;
     res.status(201).json({
-      _id,
+      _id, 
       name,
       email,
       photo,
