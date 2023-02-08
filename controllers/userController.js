@@ -7,6 +7,7 @@ const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '1d' });
 };
 
+// Register User
 const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
 
@@ -45,8 +46,8 @@ const registerUser = asyncHandler(async (req, res) => {
     httpOnly: true,
     expiresIn: new Date(Date.now() + 1000 * 86400), // 1 Day
     sameSite: 'none',
-    secure: true
-  })
+    secure: true,
+  });
 
   if (user) {
     const { _id, name, email, photo, phone, bio } = user;
@@ -65,6 +66,12 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 });
 
+// Login User
+const loginUser = asyncHandler(async (req, res) => {
+  res.send('Login user successful')
+});
+
 module.exports = {
   registerUser,
+  loginUser
 };
