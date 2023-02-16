@@ -82,7 +82,7 @@ const loginUser = asyncHandler(async (req, res) => {
 
   if (!user) {
     res.status(400);
-    throw new Error('User not found');
+    throw new Error('User not found, please signup');
   }
 
   // User exist, check if password is correct
@@ -91,8 +91,8 @@ const loginUser = asyncHandler(async (req, res) => {
   // Generate Token
   const token = generateToken(user._id);
 
-  // Send HTTP-only cookie
   if (correctPassword) {
+    // Send HTTP-only cookie
     res.cookie('token', token, {
       path: '/',
       httpOnly: true,
@@ -104,7 +104,7 @@ const loginUser = asyncHandler(async (req, res) => {
 
   if (user && correctPassword) {
     const { _id, name, email, photo, phone, bio, token } = user;
-    res.status(201).json({
+    res.status(200).json({
       _id,
       name,
       email,
@@ -133,7 +133,27 @@ const logout = asyncHandler(async (req, res) => {
 
 // Get User Data
 const getUser = asyncHandler(async (req, res) => {
-  res.send('Get user data');
+  const user = await User.findById(req.user._id);
+
+  if (user) {
+    const { _id, name, email, photo, phone, bio } = user;
+    res.status(200).json({
+      _id,
+      name,
+      email,
+      photo,
+      phone,
+      bio,
+    });
+  } else {
+    res.status(400);
+    throw new Error('User Not Found');
+  }
+});
+
+// Get Login Status
+const loginStatus = asyncHandler(async (req, res) => {
+  res.send('login status');
 });
 
 module.exports = {
@@ -141,4 +161,5 @@ module.exports = {
   loginUser,
   logout,
   getUser,
+  loginStatus,
 };
