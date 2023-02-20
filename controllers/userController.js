@@ -153,8 +153,24 @@ const getUser = asyncHandler(async (req, res) => {
 
 // Get Login Status
 const loginStatus = asyncHandler(async (req, res) => {
-  res.send('login status');
+  const token = req.cookies.token;
+
+  if (!token) {
+    return res.json(false);
+  }
+
+  // Verify Token
+  const verified = jwt.verify(token, process.env.JWT_SECRET);
+  if (verified) {
+    return res.json(true);
+  } else {
+    return res.json(false);
+  }
 });
+
+const updateUser = asyncHandler(async (req, res) => {
+  res.send("user updated")
+})
 
 module.exports = {
   registerUser,
@@ -162,4 +178,5 @@ module.exports = {
   logout,
   getUser,
   loginStatus,
+  updateUser
 };
