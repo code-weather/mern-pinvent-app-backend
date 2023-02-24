@@ -235,6 +235,12 @@ const forgotPassword = asyncHandler(async (req, res) => {
     throw new Error('User does not exist');
   }
 
+  // Delete token if it exists in DB
+  let token = await Token.findOne({ userId: user._id });
+  if (token) {
+    await token.deleteOne();
+  }
+
   // Create Reset Token
   let resetToken = crypto.randomBytes(32).toString('hex') + user._id;
 
@@ -244,7 +250,7 @@ const forgotPassword = asyncHandler(async (req, res) => {
     .update(resetToken)
     .digest('hex');
 
-  // Save Token to DB
+  // Save Token to DB...this reference back to tokenModel
   await new Token({
     userId: user._id,
     token: hashedToken,
@@ -266,18 +272,23 @@ const forgotPassword = asyncHandler(async (req, res) => {
     <p>Regards...</p>
     <p>Creator of this app</p>
     `;
-    const subject = "Password Reset Request"
-    const send_to = user.email
-    const send_from = process.env.EMAIL_USER
+  const subject = 'Password Reset Request';
+  const send_to = user.email;
+  const send_from = process.env.EMAIL_USER;
 
-    try {
-      await sendEmail(subject, message, send_to, send_from)
-      res.status(200).json({success: true, message: 'Reset Email Sent'})
-    } catch (error) {
-      res.status(400)
-      throw new Error('Email not sent, please try again')
-    }
+  try {
+    await sendEmail(subject, message, send_to, send_from);
+    res.status(200).json({ success: true, message: 'Reset Email Sent' });
+  } catch (error) {
+    res.status(400);
+    throw new Error('Email not sent, please try again');
+  }
 });
+
+// Reset Password
+const resetPassword = asyncHandler(async (req, res) => {
+  res.status('password reset')
+})
 
 module.exports = {
   registerUser,
@@ -288,4 +299,5 @@ module.exports = {
   updateUser,
   changePassword,
   forgotPassword,
+  resetPassword,
 };
