@@ -6,7 +6,6 @@ const protect = asyncHandler(async (req, res, next) => {
   try {
     const token = req.cookies.token;
     if (!token) {
-      console.log(req.cookies);
       res.status(401);
       throw new Error('Not authorized, please login');
     }

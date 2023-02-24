@@ -3,19 +3,21 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 require('dotenv').config();
 const userRoute = require('./routes/userRoutes');
+const productRoute = require('./routes/productRoute');
 const errorHandler = require('./middleware/errorMiddleware');
-const cookieParser = require('cookie-parser')
+const cookieParser = require('cookie-parser');
 
 const app = express();
 
 // Middlewares
 app.use(express.json()); // Help handle JSON data in our application
 app.use(express.urlencoded({ extended: false })); // Help handle data that comes via the URL
-app.use(cookieParser())
-app.use(cors())
+app.use(cookieParser());
+app.use(cors());
 
 // Routes Middleware
 app.use('/api/users', userRoute);
+app.use('/api/products', productRoute);
 
 // Routes
 app.get('/', (req, res) => {
