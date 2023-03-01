@@ -18,10 +18,13 @@ const createProduct = asyncHandler(async (req, res) => {
     // Save image to cloudinary
     let uploadedFile;
     try {
-      uploadedFile = await cloudinary.uploader.upload(req.file.path, {folder: 'Pinvent App', resource_type: 'image'})
+      uploadedFile = await cloudinary.uploader.upload(req.file.path, {
+        folder: 'Pinvent App',
+        resource_type: 'image',
+      });
     } catch (error) {
-      res.status(500)
-      throw new Error('Image could not be uploaded')
+      res.status(500);
+      throw new Error('Image could not be uploaded');
     }
 
     fileData = {
@@ -47,4 +50,13 @@ const createProduct = asyncHandler(async (req, res) => {
   res.status(201).json(product);
 });
 
-module.exports = { createProduct };
+// Get all Products
+const getProducts = asyncHandler(async (req, res) => {
+  const products = await Product.find({user: req.user.id}).sort('-createdAt')
+  res.status(200).json(products)
+});
+
+module.exports = {
+  createProduct,
+  getProducts,
+};
