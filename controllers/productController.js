@@ -3,6 +3,7 @@ const Product = require('../models/productModel');
 const { fileSizeFormatter } = require('../utils/fileUpload');
 const cloudinary = require('cloudinary').v2;
 
+// CREATE PRODUCT
 const createProduct = asyncHandler(async (req, res) => {
   const { name, sku, category, quantity, price, description } = req.body;
 
@@ -35,7 +36,7 @@ const createProduct = asyncHandler(async (req, res) => {
     };
   }
 
-  // Create Product
+  // CREATE PRODUCTS
   const product = await Product.create({
     user: req.user.id,
     name,
@@ -50,13 +51,13 @@ const createProduct = asyncHandler(async (req, res) => {
   res.status(201).json(product);
 });
 
-// Get all Products
+// GET ALL PRODUCTS
 const getProducts = asyncHandler(async (req, res) => {
   const products = await Product.find({ user: req.user.id }).sort('-createdAt');
   res.status(200).json(products);
 });
 
-// Get single product
+// GET SINGLE PRODUCT
 const getSingleProduct = asyncHandler(async (req, res) => {
   const product = await Product.findById(req.params.id);
   // If product doesn't exist
@@ -73,7 +74,7 @@ const getSingleProduct = asyncHandler(async (req, res) => {
   res.status(200).json(product);
 });
 
-// Delete a product
+// DELETE A PRODUCT
 const deleteProduct = asyncHandler(async (req, res) => {
   const product = await Product.findByIdAndDelete(req.params.id);
   // If product doesn't exist
@@ -90,7 +91,7 @@ const deleteProduct = asyncHandler(async (req, res) => {
   res.status(200).json(product);
 });
 
-// Update product
+// UPDATE PRODUCT
 const updateProduct = asyncHandler(async (req, res) => {
   const { name, category, quantity, price, description } = req.body;
   const { id } = req.params;
@@ -109,7 +110,7 @@ const updateProduct = asyncHandler(async (req, res) => {
   }
 
   // Handle Image upload
-  let fileData = {};
+  let fileData = product.image; // {} // Use existing image by default
   if (req.file) {
     // Save image to cloudinary
     let uploadedFile;
@@ -140,7 +141,7 @@ const updateProduct = asyncHandler(async (req, res) => {
       quantity,
       price,
       description,
-      image: fileData || product.image,
+      image: fileData, // Object.keys(fileData).length === 0 ? product?.image : fileData,,
     },
     {
       new: true,
