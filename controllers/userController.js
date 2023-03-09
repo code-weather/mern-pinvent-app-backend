@@ -624,7 +624,7 @@ const resetPassword = asyncHandler(async (req, res) => {
     .update(resetToken)
     .digest('hex');
 
-  // fIND tOKEN in DB
+  // Find Token in DB
   const userToken = await Token.findOne({
     token: hashedToken,
     expiresAt: { $gt: Date.now() },
