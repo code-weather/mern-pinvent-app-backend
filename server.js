@@ -21,6 +21,7 @@ app.use(
       'http://localhost:3000',
       'https://pinvent-app-frontend.vercel.app',
     ],
+    credentials: true,
   })
 );
 
