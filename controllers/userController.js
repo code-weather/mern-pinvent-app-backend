@@ -6,12 +6,12 @@ const Token = require('../models/tokenModel');
 const crypto = require('crypto');
 const sendEmail = require('../utils/sendEmail');
 
-// Generate Token
+// * GENERATE TOKEN
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '1d' });
 };
 
-// Register User
+// * REGISTER USER
 const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
 
@@ -69,7 +69,7 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 });
 
-// Login User
+// * LOGIN USER
 const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
@@ -120,7 +120,7 @@ const loginUser = asyncHandler(async (req, res) => {
   }
 });
 
-// Logout User
+// * LOGOUT USER
 const logout = asyncHandler(async (req, res) => {
   res.cookie('token', '', {
     path: '/',
@@ -132,7 +132,7 @@ const logout = asyncHandler(async (req, res) => {
   return res.status(200).json({ message: 'Successfully Logged Out' });
 });
 
-// Get User Data
+// * GET USER DATA
 const getUser = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
 
@@ -152,7 +152,7 @@ const getUser = asyncHandler(async (req, res) => {
   }
 });
 
-// Get Login Status
+// * GET LOGIN STATUS
 const loginStatus = asyncHandler(async (req, res) => {
   const token = req.cookies.token;
   if (!token) {
@@ -166,7 +166,7 @@ const loginStatus = asyncHandler(async (req, res) => {
   return res.json(false);
 });
 
-// Update User
+// * UPDATE USER
 const updateUser = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
 
@@ -193,6 +193,7 @@ const updateUser = asyncHandler(async (req, res) => {
   }
 });
 
+// * CHANGE PASSWORD
 const changePassword = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
   const { oldPassword, password } = req.body;
@@ -221,6 +222,7 @@ const changePassword = asyncHandler(async (req, res) => {
   }
 });
 
+// * FORGOT PASSWORD
 const forgotPassword = asyncHandler(async (req, res) => {
   const { email } = req.body;
   const user = await User.findOne({ email });
@@ -257,10 +259,10 @@ const forgotPassword = asyncHandler(async (req, res) => {
   // Construct Reset Url
   const resetUrl = `${process.env.FRONTEND_URL}/resetpassword/${resetToken}`;
 
-  // Reset Email
+  // Message sent to email to reset password
   const message = `
       <h2>Hello ${user.name}</h2>
-      <p>Please use the url below to reset your password</p>  
+      <p>Please use the url below to reset your password</p>
       <p>This reset link is valid for only 30minutes.</p>
 
       <a href=${resetUrl} clicktracking=off>${resetUrl}</a>
@@ -281,7 +283,7 @@ const forgotPassword = asyncHandler(async (req, res) => {
   }
 });
 
-// Reset Password
+// * RESET PASSWORD
 const resetPassword = asyncHandler(async (req, res) => {
   const { password } = req.body;
   const { resetToken } = req.params;
