@@ -19,7 +19,7 @@ app.use(
   cors({
     origin: [
       'http://localhost:3000',
-      'https://pinvent-app-frontend.vercel.app',
+      'https://pinvent-technologies.vercel.app/',
     ],
     credentials: true,
   })
