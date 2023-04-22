@@ -40,7 +40,7 @@ const registerUser = asyncHandler(async (req, res) => {
     password,
   });
 
-  //   Generate Token
+  // Generate Token
   const token = generateToken(user._id);
 
   // Send HTTP-only cookie
@@ -90,7 +90,7 @@ const loginUser = asyncHandler(async (req, res) => {
   // User exists, check if password is correct
   const passwordIsCorrect = await bcrypt.compare(password, user.password);
 
-  //   Generate Token
+  // Generate Token
   const token = generateToken(user._id);
 
   if (passwordIsCorrect) {
@@ -103,6 +103,7 @@ const loginUser = asyncHandler(async (req, res) => {
       secure: true,
     });
   }
+
   if (user && passwordIsCorrect) {
     const { _id, name, email, photo, phone, bio } = user;
     res.status(200).json({
@@ -155,11 +156,14 @@ const getUser = asyncHandler(async (req, res) => {
 // * GET LOGIN STATUS
 const loginStatus = asyncHandler(async (req, res) => {
   const token = req.cookies.token;
+
   if (!token) {
     return res.json(false);
   }
+
   // Verify Token
   const verified = jwt.verify(token, process.env.JWT_SECRET);
+
   if (verified) {
     return res.json(true);
   }
@@ -202,7 +206,8 @@ const changePassword = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error('User not found, please signup');
   }
-  //Validate
+
+  // Validate
   if (!oldPassword || !password) {
     res.status(400);
     throw new Error('Please add old and new password');
@@ -238,7 +243,7 @@ const forgotPassword = asyncHandler(async (req, res) => {
     await token.deleteOne();
   }
 
-  // Create Reste Token
+  // Create Reset Token
   let resetToken = crypto.randomBytes(32).toString('hex') + user._id;
   console.log(resetToken);
 
@@ -263,7 +268,7 @@ const forgotPassword = asyncHandler(async (req, res) => {
   const message = `
       <h2>Hello ${user.name}</h2>
       <p>Please use the url below to reset your password</p>
-      <p>This reset link is valid for only 30minutes.</p>
+      <p>This reset link is valid for only 30 minutes.</p>
 
       <a href=${resetUrl} clicktracking=off>${resetUrl}</a>
 
