@@ -12,7 +12,13 @@ const path = require('path');
 const app = express();
 
 // Middlewares
-app.use(cors());
+app.use(cors({
+  origin: [
+    'http://localhost:3000',
+    'https://mern-pinvent-app-frontend-7cnu1rdal-code-weather.vercel.app'
+  ],
+  credentials: true
+}));
 app.use(express.json()); // Help handle JSON data in our application
 app.use(express.urlencoded({ extended: false })); // Help handle data that comes via the URL
 app.use(cookieParser());
