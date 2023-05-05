@@ -12,9 +12,6 @@ const path = require('path');
 const app = express();
 
 // Middlewares
-app.use(express.json()); // Help handle JSON data in our application
-app.use(express.urlencoded({ extended: false })); // Help handle data that comes via the URL
-app.use(cookieParser());
 app.use(
   cors({
     origin: [
@@ -24,6 +21,9 @@ app.use(
     credentials: true,
   })
 );
+app.use(express.json()); // Help handle JSON data in our application
+app.use(express.urlencoded({ extended: false })); // Help handle data that comes via the URL
+app.use(cookieParser());
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
