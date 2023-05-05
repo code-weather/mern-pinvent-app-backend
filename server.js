@@ -19,7 +19,7 @@ app.use(
   cors({
     origin: [
       'http://localhost:3000',
-      'https://pinvent-technologies.vercel.app/',
+      'https://pinvent-app-frontend-3bs9libz2-code-weather.vercel.app/',
     ],
     credentials: true,
   })
